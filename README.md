@@ -1,3 +1,4 @@
 # DuckDuckGo
 
-A description of this package.
+Swift package for getting search results from DuckDuckGo
+
