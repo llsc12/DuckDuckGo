@@ -8,6 +8,8 @@ final class DuckDuckGoTests: XCTestCase {
         // results.
         
         let search = try await DuckDuckGo.search("egg")
-        print(search.results.first!)
+        
+        let suggestions = try await DuckDuckGo.getSearchCompletions("hacking")
+        print(suggestions)
     }
 }

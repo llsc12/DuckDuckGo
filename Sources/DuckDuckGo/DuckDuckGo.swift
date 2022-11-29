@@ -5,15 +5,6 @@
 //  Created by Lakhan Lothiyi on 28/11/2022.
 //
 
-#if os(macOS)
-import AppKit
-#endif
-#if os(iOS)
-import UIKit
-#endif
-#if os(watchOS)
-
-#endif
 import CoreFoundation
 import Foundation
 import SwiftSoup
@@ -34,7 +25,7 @@ public final class DuckDuckGo {
         return comp.url!
     }
     
-    public static func getSearchCompletions(_ q: String) async throws {
+    public static func getSearchCompletions(_ q: String) async throws -> Completions {
         // MARK: - Craft url and request
         guard let query = q.queryFormatted else { throw self.Errors.disallowedQuery }
         let url = self.completionsUrlBuilder(query: query)
@@ -57,6 +48,11 @@ public final class DuckDuckGo {
         
         // MARK: - Parse into object and return a simpler structure instead
         
+        guard let decoded = try? JSONDecoder().decode(CompletionSet.self, from: data) else { throw self.Errors.failedToDecode }
+
+        let completions: Completions = decoded.map { $0.phrase }
+        
+        return completions
     }
     
     public typealias Completions = [String]
@@ -70,7 +66,7 @@ public final class DuckDuckGo {
         elem.hasClass("web-result")
     }
     
-    public static func search(_ q: String) async throws -> DuckDuckGo.SearchResults {
+    public static func search(_ q: String) async throws -> SearchResults {
         
         // MARK: - Craft url and request
         guard let query = q.queryFormatted else { throw self.Errors.disallowedQuery }
@@ -123,11 +119,10 @@ public final class DuckDuckGo {
     
     public enum Errors: Error {
         case disallowedQuery
+        case failedToDecode
         case failedToStringify
         case noBody
     }
-    
-    
 }
 
 fileprivate extension String {
