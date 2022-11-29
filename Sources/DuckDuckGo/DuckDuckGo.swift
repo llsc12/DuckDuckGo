@@ -74,17 +74,17 @@ public final class DuckDuckGo {
     }
     
     public struct SearchResults {
-        let query: String
-        let url: URL
-        var results: [DuckDuckGo.Result]
+        public let query: String
+        public let url: URL
+        public var results: [DuckDuckGo.Result]
     }
     
     public struct Result: Identifiable {
         public var id: URL { url }
-        let title: String
-        let url: URL
-        let icon: URL
-        let snippet: String
+        public let title: String
+        public let url: URL
+        public let icon: URL
+        public let snippet: String
     }
     
     public enum Errors: Error {
