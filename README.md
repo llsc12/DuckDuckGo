@@ -32,7 +32,16 @@ let completions = try await DuckDuckGo.getSearchCompletions("hacking")
 ```
 Returns
 ```swift
-["hacking", "hacking simulator", "hacking prank", "hacking and paterson", "hacking & paterson", "hacking games", "hacking typer", "hacking screen"]
+[
+    "hacking", 
+    "hacking simulator", 
+    "hacking prank", 
+    "hacking and paterson", 
+    "hacking & paterson", 
+    "hacking games", 
+    "hacking typer", 
+    "hacking screen"
+]
 ```
 
 ## why
