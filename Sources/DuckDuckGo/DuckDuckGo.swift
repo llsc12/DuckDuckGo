@@ -27,8 +27,43 @@ public final class DuckDuckGo {
         return comp.url!
     }
     
+    internal static func completionsUrlBuilder(query: String) -> URL {
+        let baseStr = "https://duckduckgo.com/ac/"
+        var comp = URLComponents(string: baseStr)!
+        comp.queryItems = [URLQueryItem(name: "q", value: query)]
+        return comp.url!
+    }
+    
     public static func getSearchCompletions(_ q: String) async throws {
+        // MARK: - Craft url and request
+        guard let query = q.queryFormatted else { throw self.Errors.disallowedQuery }
+        let url = self.completionsUrlBuilder(query: query)
+        var req = URLRequest(url: url)
+        req.httpMethod = "GET"
         
+        // MARK: - Get data from request and make it html
+        // add headers
+        req.addValue("application/json, text/javascript, */*; q=0.01", forHTTPHeaderField: "Accept")
+        req.addValue("ao=-1; ax=v354-4; l=wt-wt", forHTTPHeaderField: "Cookie")
+        req.addValue("en-GB,en;q=0.9", forHTTPHeaderField: "Accept-Language")
+        req.addValue("duckduckgo.com", forHTTPHeaderField: "Host")
+        req.addValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15", forHTTPHeaderField: "User-Agent")
+        req.addValue("https://duckduckgo.com/", forHTTPHeaderField: "Referer")
+        req.addValue("gzip, deflate, br", forHTTPHeaderField: "Accept-Encoding")
+        req.addValue("keep-alive", forHTTPHeaderField: "Connection")
+        req.addValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
+
+        let (data, _) = try await URLSession.shared.data(for: req)
+        
+        // MARK: - Parse into object and return a simpler structure instead
+        
+    }
+    
+    public typealias Completions = [String]
+    
+    internal typealias CompletionSet = [DuckDuckGo.Completion]
+    internal struct Completion: Codable {
+        let phrase: String
     }
     
     internal static func isValidResultElement(_ elem: Element) -> Bool {
@@ -91,6 +126,8 @@ public final class DuckDuckGo {
         case failedToStringify
         case noBody
     }
+    
+    
 }
 
 fileprivate extension String {
@@ -98,15 +135,3 @@ fileprivate extension String {
         self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
     }
 }
-
-//fileprivate extension Data {
-//    var html2String: String? {
-//        #if !os(watchOS)
-//        let str = try? NSAttributedString(data: self, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-//        return str?.string
-//        #endif
-//        #if os(watchOS)
-//            return nil
-//        #endif
-//    }
-//}
