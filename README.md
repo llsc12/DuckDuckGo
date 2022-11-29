@@ -27,5 +27,12 @@ URLs are returned as URL objects, they were copied from console like this.
 
 ### Completions
 ```swift
-// in progress
+let completions = try await DuckDuckGo.getSearchCompletions("hacking")
 ```
+Returns
+```swift
+["hacking", "hacking simulator", "hacking prank", "hacking and paterson", "hacking & paterson", "hacking games", "hacking typer", "hacking screen"]
+```
+
+## why
+bc theres a shit ton of search engine apis that are paid and it annoyed me also [superbro](https://github.com/superbro9) needed it
