@@ -1,0 +1,11 @@
+import XCTest
+@testable import DuckDuckGo
+
+final class DuckDuckGoTests: XCTestCase {
+    func testExample() throws {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct
+        // results.
+        XCTAssertEqual(DuckDuckGo().text, "Hello, World!")
+    }
+}
