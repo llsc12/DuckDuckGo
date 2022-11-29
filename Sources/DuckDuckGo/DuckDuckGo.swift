@@ -59,7 +59,7 @@ public final class DuckDuckGo {
         
         for result in resultsHtmlArray {
             guard let title = try? result.getElementsByClass("result__title").first()?.text().removingPercentEncoding else { continue }
-            guard let urlStr = try? result.getElementsByClass("result__url").first()?.attr("href") else { continue }
+            guard let urlStr = try? result.getElementsByClass("result__a").first()?.attr("href") else { continue }
             guard let url = URL(string: urlStr) else { continue }
             guard let iconImgSrcStr = try? result.getElementsByClass("result__icon").first()?.children().first()?.children().first()?.attr("src") else { continue }
             guard let icon = URL(string: "https:\(iconImgSrcStr)") else { continue }
