@@ -5,6 +5,16 @@
 //  Created by Lakhan Lothiyi on 28/11/2022.
 //
 
+#if os(macOS)
+import AppKit
+#endif
+#if os(iOS)
+import UIKit
+#endif
+#if os(watchOS)
+
+#endif
+import CoreFoundation
 import Foundation
 import SwiftSoup
 
@@ -53,8 +63,8 @@ public final class DuckDuckGo {
             guard let url = URL(string: urlStr) else { continue }
             guard let iconImgSrcStr = try? result.getElementsByClass("result__icon").first()?.children().first()?.children().first()?.attr("src") else { continue }
             guard let icon = URL(string: "https:\(iconImgSrcStr)") else { continue }
-            guard let snippetHtmlData = try? result.getElementsByClass("result__snippet").html().data(using: .utf8) else { continue }
-            guard let snippet = snippetHtmlData.html2String else { continue }
+            guard let snippet = try? result.getElementsByClass("result__snippet").text() else { continue }
+//            guard let snippet = snippetHtmlData.html2String else { continue }
             
             let object = Result(title: title, url: url, icon: icon, snippet: snippet)
             resultsObject.results.append(object)
@@ -90,9 +100,14 @@ fileprivate extension String {
     }
 }
 
-fileprivate extension Data {
-    var html2String: String? {
-        let str = NSAttributedString(html: self, documentAttributes: nil)
-        return str?.string
-    }
-}
+//fileprivate extension Data {
+//    var html2String: String? {
+//        #if !os(watchOS)
+//        let str = try? NSAttributedString(data: self, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+//        return str?.string
+//        #endif
+//        #if os(watchOS)
+//            return nil
+//        #endif
+//    }
+//}
