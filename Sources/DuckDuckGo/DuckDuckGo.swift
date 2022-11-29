@@ -60,11 +60,10 @@ public final class DuckDuckGo {
         for result in resultsHtmlArray {
             guard let title = try? result.getElementsByClass("result__title").first()?.text().removingPercentEncoding else { continue }
             guard let urlStr = try? result.getElementsByClass("result__a").first()?.attr("href") else { continue }
-            guard let url = URL(string: urlStr) else { continue }
+            guard let url = URL(string: "https:\(urlStr)") else { continue }
             guard let iconImgSrcStr = try? result.getElementsByClass("result__icon").first()?.children().first()?.children().first()?.attr("src") else { continue }
             guard let icon = URL(string: "https:\(iconImgSrcStr)") else { continue }
             guard let snippet = try? result.getElementsByClass("result__snippet").text() else { continue }
-//            guard let snippet = snippetHtmlData.html2String else { continue }
             
             let object = Result(title: title, url: url, icon: icon, snippet: snippet)
             resultsObject.results.append(object)

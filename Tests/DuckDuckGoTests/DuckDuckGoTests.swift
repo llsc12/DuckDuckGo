@@ -7,6 +7,7 @@ final class DuckDuckGoTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
         
-        try await DuckDuckGo.search("egg")
+        let search = try await DuckDuckGo.search("egg")
+        print(search.results.first!)
     }
 }
